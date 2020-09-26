@@ -1,0 +1,35 @@
+import { Component, OnInit, Input} from '@angular/core'; //angularのcoreからコンポーネント、出力、入力をインポート
+import {Hero} from '../hero';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { HeroService } from '../hero.service';
+
+
+@Component({
+  selector: 'app-hero-detail',
+  templateUrl: './hero-detail.component.html',
+  styleUrls: ['./hero-detail.component.css']
+})
+export class HeroDetailComponent implements OnInit {
+  hero: Hero;
+
+  constructor(
+    private route:ActivatedRoute,//インスタンスへのルートに関する情報を女児
+    private heroServcie:HeroService,//リモートサーバからヒーローのデータ取得
+    private location:Location//ブラウザと対話。位置情報の保持
+  ) { }
+
+  ngOnInit(): void {
+	this.getHero();
+  }
+  getHero(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.heroService.getHero(id)
+      .subscribe(hero => this.hero = hero);
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+}
+
